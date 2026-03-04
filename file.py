@@ -5,47 +5,46 @@ import random
 
 
 def classes(): # This will be used to get the classes to use in-game (1998 is a dev character)
-    class_num = int(input("Enter a number, 1 for melee, 2 for ranged, 3 for wizard:"))
+    class_num = int(input("Enter a number, 1 for offensive, 2 for support, 3 for defensive/survivalist:"))
     if class_num != 1 and class_num != 2 and class_num != 3 and != 1998:
         print("Not a valid class:")
-        class_num = int(input("Enter a number, 1 for melee, 2 for ranged, 3 for wizard:"))
+        class_num = int(input("Enter a number, 1 for offensive, 2 for support, 3 for defensive/survivalist:"))
     if class_num == 1:
-        class_name = "fighter"
-        class_hp = 35
-        defense_fighter = 10
+        class_name = "Offense"
+        class_hp = 100
+        defense_fighter = 1
         list_classes = [class_num, class_name, class_hp, defense_fighter, dodge_hp,]
 
+        teammate_name = "Support"
+        teammate_hp = 100
+        defense_teammate = 1
+        list_teammate = [teammate_name, teammate_hp, defense_teammate]
+
     elif class_num == 2:
-        class_name = "Ranger"
-        class_hp = 25
-        dodge_hp = 5
-        defense_ranger = 0
-        list_classes = [class_num, class_name, class_hp, defense_ranger, dodge_hp,]
+        class_name = "Support"
+        class_hp = 100
+        defense_support = 1
+        list_classes = [class_num, class_name, class_hp, defense_support,]
+
+        teammate_name = "Defense"
+        teammate_hp = 150
+        defense_teammate = .5
+        list_teammate = [teammate_name, teammate_hp, defense_teammate]
 
     elif class_num == 3:
-        class_name = "Wizard"
-        class_hp = 20
-        defense_wiz = 0
-        dodge_hp = 10 # Dodge HP will be able to be regenerated, and will only apply to this class to balance it
-        list_classes = [class_num, class_name, class_hp, defense_wiz, dodge_hp,]
+        class_name = "Defense"
+        class_hp = 150
+        defense_defense = 1.5
+        list_classes = [class_num, class_name, class_hp, defense_defense]
 
-    elif class_num == 1998:
-        class_name = "Outcome"
-        class_hp = 165
-        defense_outcome = .1
-        dodge_hp = 50
-        list_classes = [class_num, class_name, class_hp, defense_outcome, dodge_hp]
-    return class_hp
-    return dodge_hp
-    return defense
-    if defense_outcome = .4:
-        return defense_outcome
-    if defense_fighter = 10:
-        return defense_fighter
-    return class_name
+        teammate_name = "Offense"
+        teammate_hp = 100
+        defense_teammate = 1
+        list_teammate = [teammate_name, teammate_hp, defense_teammate]
+    return list_classes
     
 
-def difficulty(): # 1998 is once again a dev mode, the 1998 modifiers should be paired together.
+def difficulty(): 
 
     difficulty_num = int(input("Enter difficulty, 1 is easy, 2 is medium, 3 is hard: "))
     while difficulty_num != 1 and difficulty_num != 2 and difficulty_num != 3:
