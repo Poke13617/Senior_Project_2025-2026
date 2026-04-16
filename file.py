@@ -257,7 +257,7 @@ def apply_player_ability(
         shield += 10
         print("You raise a protective barrier for 10 incoming damage.")
     elif ability_name == "Fortify Guard":
-        shield += 12
+        shield += 25
         print("You brace yourself and reduce the next incoming damage.")
     elif ability_name == "Sprint":
         print("You sprint away to create distance.")
