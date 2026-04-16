@@ -58,7 +58,7 @@ def offense_kit() -> dict:
                 "cooldown": 8,
                 "description": "Lunge forward with a powerful strike that stuns the enemy for 2 turns.",
                 "distance": 2,
-                "stun_time": 2,
+                "stun_time": 3,
                 "distance_change": 1,
             },
             "Sprint": {
@@ -91,7 +91,7 @@ def support_kit() -> dict:
             "Dash Forward": {
                 "cooldown": 6,
                 "description": "Dash forward to push back out of range.",
-                "distance_change": 2,
+                "distance_change": 2.75,
             },
             "Jump": {
                 "cooldown": 4,
@@ -106,7 +106,7 @@ def defense_kit() -> dict:
     """Return the defense kit abilities and their cooldowns."""
     return {
         "kit": KitSelector.select_kit(3),
-        "health": 110,
+        "health": 165,
         "abilities": {
             "Fortify Guard": {
                 "cooldown": 3,
@@ -118,7 +118,7 @@ def defense_kit() -> dict:
                 "cooldown": 5,
                 "description": "Stunning strike that slows nearby enemies.",
                 "distance": 1,
-                "stun_time": 1,
+                "stun_time": 3,
                 "distance_change": 0.5,  # move away
             },
             "Jump": {
@@ -137,19 +137,19 @@ def enemy_kit() -> dict:
         "stun_timer": 0,
         "abilities": {
             "Slash": {
-                "cooldown": 4,
+                "cooldown": 5,
                 "description": "Quick slash that deals damage and can interrupt enemy actions.",
                 "damage": 20,
                 "range": 1,
             },
             "Invisibility": {
-                "cooldown": 5,
+                "cooldown": 7,
                 "description": "Vanish briefly and instantly close distance, damaging the target, but hinders yourself for one turn.",
                 "damage": 30,
-                "range": 4,
+                "range": 4.5,
             },
             "Charge": {
-                "cooldown": 6,
+                "cooldown": 8,
                 "description": "Charge forward to pin the enemy in place and deal damage based on a portion of the target's current health.",
                 "base_damage": 10,
                 "percent_health": 0.25,
@@ -213,14 +213,15 @@ def choose_player_ability(player_kit: dict, cooldowns: dict[str, int]) -> tuple[
         return name, info
 
 
-def select_enemy_attack(enemy: dict, enemy_cooldowns: dict[str, int]) -> tuple[str, dict]:
-    """Pick a random enemy attack that is off cooldown."""
+def select_enemy_attack(enemy: dict, enemy_cooldowns: dict[str, int]) -> tuple[str | None, dict | None]:
+    """Pick a random enemy attack that is off cooldown.
+
+    If no abilities are ready, the Executioner must recover this turn instead of attacking.
+    """
     available = [name for name in enemy["abilities"] if enemy_cooldowns.get(name, 0) == 0]
     if not available:
-        # If all on cooldown, pick any (shouldn't happen often)
-        ability_name = random.choice(list(enemy["abilities"].keys()))
-    else:
-        ability_name = random.choice(available)
+        return None, None
+    ability_name = random.choice(available)
     ability_data = enemy["abilities"][ability_name]
     return ability_name, ability_data
 
@@ -232,6 +233,7 @@ def apply_player_ability(
     shield: int,
     player_distance: float,
     player_invincible: bool,
+    player_max_health: int,
 ) -> tuple[int, int, float, int, bool]:
     """Apply the selected player ability and return updated health, shield, distance, enemy stun, and invincibility."""
     if ability_name == "Skip":
@@ -241,8 +243,14 @@ def apply_player_ability(
     distance_change = ability_data.get("distance_change", 0)
     if ability_name == "Quick Heal":
         heal_amount = ability_data["heal"]
-        player_health += heal_amount
-        print(f"You heal yourself for {heal_amount} health.")
+        overheal_amount = ability_data.get("overheal", 0)
+        if player_health >= player_max_health:
+            shield += overheal_amount
+            print(f"You are already at full health and gain {overheal_amount} overheal.")
+        else:
+            healed = min(player_max_health - player_health, heal_amount)
+            player_health += healed
+            print(f"You heal yourself for {healed} health.")
     elif ability_name == "Dash Forward":
         print(f"You dash forward, increasing distance.")
     elif ability_name == "Protective Barrier":
@@ -324,6 +332,7 @@ def play_survival_game() -> None:
     enemy = enemy_kit()
 
     player_health = player_kit["health"]
+    player_max_health = player_kit["health"]
     shield = 0
     player_stun = 0
     enemy_stun = 0
@@ -345,21 +354,32 @@ def play_survival_game() -> None:
             enemy_stun -= 1
         else:
             enemy_name, enemy_data = select_enemy_attack(enemy, enemy_cooldowns)
-            player_health, shield, player_distance, enemy_self_stun = apply_enemy_attack(enemy_name, enemy_data, player_health, shield, player_distance, player_invincible)
-            enemy_stun += enemy_self_stun
-            enemy_cooldowns[enemy_name] = enemy_data["cooldown"]
-            # Executioner advances slowly towards the survivor until in range for Slash
+            if enemy_name is None:
+                print("The Executioner has no abilities ready and is forced to recover this turn.")
+            else:
+                player_health, shield, player_distance, enemy_self_stun = apply_enemy_attack(
+                    enemy_name, enemy_data, player_health, shield, player_distance, player_invincible
+                )
+                enemy_stun += enemy_self_stun
+                enemy_cooldowns[enemy_name] = enemy_data["cooldown"]
+                player_invincible = False  # invincibility lasts for this enemy attack
+            # Executioner still closes in while recharging.
             if player_distance > 1:
                 player_distance = max(0, player_distance - 0.15)
                 print(f"The Executioner advances closer. Distance: {player_distance:.2f}")
-            player_invincible = False  # invincibility lasts for this enemy attack
 
         if player_stun > 0:
             print("You are stunned and lose this turn.")
         else:
             ability_name, ability_data = choose_player_ability(player_kit, player_cooldowns)
             player_health, shield, player_distance, enemy_stun, player_invincible = apply_player_ability(
-                ability_name, ability_data, player_health, shield, player_distance, player_invincible
+                ability_name,
+                ability_data,
+                player_health,
+                shield,
+                player_distance,
+                player_invincible,
+                player_max_health,
             )
             if ability_name != "Skip":
                 player_cooldowns[ability_name] = ability_data["cooldown"]
