@@ -178,7 +178,7 @@ def get_player_kit(kit_number: int) -> dict:
 
 
 def choose_int(prompt: str, valid_options: list[int]) -> int:
-    """Prompt the user until a valid integer choice is entered."""
+    """Error management - Invalid input"""
     while True:
         choice = input(prompt).strip()
         if choice.isdigit() and int(choice) in valid_options:
@@ -320,7 +320,7 @@ def apply_enemy_attack(
 
 
 def play_survival_game() -> None:
-    """Run the main survival game loop."""
+    # The game
     print("Welcome to Survivor vs Executioner!")
     print("Choose your survivor kit:")
     print("  1. Offense\n  2. Support\n  3. Defense")
