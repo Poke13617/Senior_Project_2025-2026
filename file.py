@@ -6,6 +6,7 @@ DIFFICULTY_SETTINGS = {
     3: {"name": "Hard", "survival_time": 180},
 }
 
+
 # Terrain map (height levels: 1=ground, 2=mid, 3=top, W=wall)
 TERRAIN_MAP = [
     [3,3,3,3,3,3,3,3,3,'W','W',3,3,3,3,3,3,3,3,3,3,3,3,3],
