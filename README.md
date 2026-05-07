@@ -85,3 +85,19 @@ It'll look something like this (for the record, 1 is base level, 2 is second lay
 
 
                    The mini map should change according to your movement. Teammates should still be moving around the map,this is just so we can see NPC interactions
+
+
+
+
+                   Here's what still needs to be done/fixed:
+
+                   - IMPORTANT - The enemy does not move whatsoever, we also need it coded where he can't attack from the lowest elevation to the highest elevation, or through walls.
+                   - Maybe a second map
+                   - Maybe some colors to show the map and characters better
+                   - IMPORTANT - 2 Bots! 2 Bots that would take the kits you aren't using, would give basic communications, such as "on cooldown, I'll use <This ability> when you get back here. It would also be cool if they could take in certain prompts like asking them to use abilities. It would add the realism (And maybe a little toxicity on the side could be funny too, just basic things like "thanks a lot, <player's class name>, now I'm dead.")
+                   - Maybe some cosmetics. They would change the color of the tile
+                   - If time permits, a second executioner, thinking similar to tripwire from outcome memories, a trapper.
+                   - Smarter NPCs that'll use their kits better. For example, executioner would wait until they're far out of range before using a rushdown ability. Also, losing tracking of the player temporarily when weaved behind a wall. Along with these, something important is so the trapper would be able to place mines that wouldn't move away.
+                   - Defense kit rework: will have the same health as before, but instead, now carries a heal, a stun, and a self-destruct. This would allow for it to play more like a defensive tank.
+                   - IMPORTANT - LMS: LMS (or Last Man Standing) Is big in the asymmetrical horror genre, and this game shouldn't be an acception. LMS would set the timer to 130 and set your health to 150.
+                   - Timer modification, kills on teammates add 25 seconds ecah.
