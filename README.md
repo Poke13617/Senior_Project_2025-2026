@@ -100,4 +100,4 @@ It'll look something like this (for the record, 1 is base level, 2 is second lay
                    - Smarter NPCs that'll use their kits better. For example, executioner would wait until they're far out of range before using a rushdown ability. Also, losing tracking of the player temporarily when weaved behind a wall. Along with these, something important is so the trapper would be able to place mines that wouldn't move away.
                    - Defense kit rework: will have the same health as before, but instead, now carries a heal, a stun, and a self-destruct. This would allow for it to play more like a defensive tank.
                    - IMPORTANT - LMS: LMS (or Last Man Standing) Is big in the asymmetrical horror genre, and this game shouldn't be an acception. LMS would set the timer to 130 and set your health to 150.
-                   - Timer modification, kills on teammates add 25 seconds ecah.
+                   - Timer modification, kills on teammates makes the current timer 15 seconds longer, this makes surviving with teammates more important
