@@ -5,11 +5,15 @@ DIFFICULTY_SETTINGS = {
     1: {"name": "Easy", "survival_time": 90},
     2: {"name": "Normal", "survival_time": 120},
     3: {"name": "Hard", "survival_time": 180},
+    4: {"name": "Solo", "survival_time": 120},
 }
 
 
-# Terrain map (height levels: 1=ground, 2=mid, 3=top, W=wall)
-TERRAIN_MAP = [
+# Define multiple maps (all same dimensions: 24x14). Each cell: 1,2,3 heights or 'W' for wall.
+MAPS = []
+
+# Map 1: Original arena
+MAPS.append([
     [3,3,3,3,3,3,3,3,3,'W','W',3,3,3,3,3,3,3,3,3,3,3,3,3],
     [3,3,3,'W',3,3,3,3,3,'W','W',3,3,'W',3,3,3,3,2,1,1,1,2,3],
     [3,'W','W','W',3,3,3,3,3,3,'W',3,3,3,3,'W',3,'W',2,1,1,1,2,3],
@@ -23,8 +27,65 @@ TERRAIN_MAP = [
     [3,3,1,1,1,3,3,3,3,3,3,3,3,3,3,3,'W','W',3,3,3,3,3,3],
     [3,3,1,1,1,3,3,3,3,'W','W',3,3,3,3,3,'W','W',3,3,3,3,3,3],
     [3,3,3,3,3,3,3,3,3,3,3,3,'W',3,3,3,3,3,3,3,3,3,3,3],
-    [3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3]
-]
+    [3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3]
+])
+
+# Map 2: Open field with a central ridge and side walls
+MAPS.append([
+    [3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,'W','W',3,3,3],
+    [3,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,'W','W',2,2,3],
+    [3,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,3],
+    [3,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,3],
+    [3,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,3],
+    [3,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,3],
+    [3,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,3],
+    [3,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,3],
+    [3,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,3],
+    [3,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,3],
+    [3,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,'W','W',2,2,3],
+    [3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
+    [3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
+    [3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3]
+])
+
+# Map 3: Narrow corridors / maze-ish
+MAPS.append([
+    [3,'W',3,3,3,3,3,3,'W',3,3,3,3,3,'W',3,3,3,3,'W',3,3,3,3],
+    [3,'W',3,'W','W','W',3,'W','W',3,'W','W','W',3,'W',3,'W','W',3,'W',3,'W',3,3],
+    [3,'W',3,1,1,1,3,1,1,1,1,1,1,3,1,1,1,1,3,'W',1,1,1,3],
+    [3,'W',3,1,'W',1,3,1,'W',1,'W',1,'W',3,1,'W',1,'W',3,'W',1,'W',1,3],
+    [3,'W',3,1,1,1,3,1,1,1,1,1,1,3,1,1,1,1,3,'W',1,1,1,3],
+    [3,'W',3,'W','W','W',3,'W','W',3,'W','W','W',3,'W',3,'W','W',3,'W',3,'W',3,3],
+    [3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
+    [3,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,3],
+    [3,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,3],
+    [3,2,1,'W',1,'W',1,'W',1,'W',1,'W',1,'W',1,'W',1,'W',1,'W',1,'W',2,3],
+    [3,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,3],
+    [3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
+    [3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
+    [3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3]
+])
+
+# Map 4: Island with interior walls
+MAPS.append([
+    [3,3,3,3,3,3,3,3,3,3,'W','W',3,3,3,3,3,3,3,3,3,3,3,3],
+    [3,1,1,1,1,1,1,1,1,1,'W','W',1,1,1,1,1,1,1,1,1,1,1,3],
+    [3,1,'W','W',1,1,1,'W','W',1,1,1,1,'W','W',1,1,'W',1,1,1,1,1,3],
+    [3,1,'W','W',1,1,1,'W','W',1,1,1,1,'W','W',1,1,'W',1,1,1,1,1,3],
+    [3,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,3],
+    [3,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,3],
+    [3,1,1,1,'W','W',1,1,1,1,1,1,1,1,1,1,1,'W','W',1,1,1,1,3],
+    [3,1,1,1,'W','W',1,1,1,1,1,1,1,1,1,1,1,'W','W',1,1,1,1,3],
+    [3,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,3],
+    [3,1,'W','W',1,1,1,'W','W',1,1,1,1,'W','W',1,1,'W',1,1,1,1,1,3],
+    [3,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,3],
+    [3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
+    [3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
+    [3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3]
+])
+
+# Start with the first map by default; play_survival_game will pick one at runtime.
+TERRAIN_MAP = MAPS[0]
 
 MAP_HEIGHT = len(TERRAIN_MAP)
 MAP_WIDTH = len(TERRAIN_MAP[0]) if TERRAIN_MAP else 0
@@ -49,53 +110,67 @@ def is_valid_position(x: int, y: int, current_height: int) -> bool:
 
 
 def display_mini_map(player_pos: list[int], enemy_pos: list[int], teammates: list[dict]) -> None:
-    """Display a 6x12 mini-map centered around the player position."""
-    center_x, center_y = player_pos
-    mini_height = 6
-    mini_width = 12
-    start_x = max(0, center_x - mini_width // 2)
-    start_y = max(0, center_y - mini_height // 2)
+    """Display the full game map with player, enemy, and teammate markers."""
+    def colorize(char: str, kit: str | None = None) -> str:
+        terrain_colors = {
+            '1': '\033[38;5;130m',  # darker brown ground
+            '2': '\033[38;5;136m',  # medium brown mid elevation
+            '3': '\033[38;5;180m',  # lighter high ground
+            'W': '\033[90m',        # walls
+            '|': '\033[90m',
+            '_': '\033[90m',
+        }
+        kit_colors = {
+            'Offense': '\033[94m',       # blue
+            'Support': '\033[38;5;229m', # cream
+            'Defense': '\033[91m',       # red
+        }
+        marker_colors = {
+            'P': '\033[92m',  # bright green player
+            'E': '\033[34m',  # navy/dark blue executioner
+        }
+        color = marker_colors.get(char)
+        if not color and kit:
+            color = kit_colors.get(kit)
+        if not color:
+            color = terrain_colors.get(char, '')
+        reset = '\033[0m'
+        return f"{color}{char}{reset}" if color else char
 
-    print("Mini-Map:")
-    print("____________________________")
+    print("Full Map:")
+    print("_" * (MAP_WIDTH * 2 + 3))
 
-    for dy in range(mini_height):
+    for y in range(MAP_HEIGHT):
         row_str = "| "
-        map_y = start_y + dy
-
-        if map_y >= MAP_HEIGHT:
-            row_str += " " * (mini_width * 2 - 1)
-        else:
-            for dx in range(mini_width):
-                map_x = start_x + dx
-                if map_x >= MAP_WIDTH:
-                    row_str += " "
-                else:
-                    cell = TERRAIN_MAP[map_y][map_x]
-                    entity_here = None
-                    if [map_x, map_y] == player_pos:
-                        entity_here = "P"
-                    elif [map_x, map_y] == enemy_pos:
-                        entity_here = "E"
-                    else:
-                        for index, teammate in enumerate(teammates):
-                            if teammate["alive"] and teammate["pos"] == [map_x, map_y]:
-                                entity_here = chr(ord("A") + index)
-                                break
-                    if entity_here:
-                        row_str += entity_here
-                    elif cell == 'W':
-                        row_str += "|" if dx == 0 or dx == mini_width - 1 else "_"
-                    elif isinstance(cell, int):
-                        row_str += str(cell)
-                    else:
-                        row_str += " "
-                if dx < mini_width - 1:
-                    row_str += " "
+        for x in range(MAP_WIDTH):
+            cell = TERRAIN_MAP[y][x]
+            entity_here = None
+            if [x, y] == player_pos:
+                entity_here = "P"
+            elif [x, y] == enemy_pos:
+                entity_here = "E"
+            else:
+                teammate_kit = None
+                for index, teammate in enumerate(teammates):
+                    if teammate["alive"] and teammate["pos"] == [x, y]:
+                        entity_here = chr(ord("A") + index)
+                        teammate_kit = teammate["kit"]
+                        break
+            if entity_here:
+                row_str += colorize(entity_here, teammate_kit)
+            elif cell == 'W':
+                wall_char = "|" if x == 0 or x == MAP_WIDTH - 1 else "_"
+                row_str += colorize(wall_char)
+            elif isinstance(cell, int):
+                row_str += colorize(str(cell))
+            else:
+                row_str += " "
+            if x < MAP_WIDTH - 1:
+                row_str += " "
         row_str += " |"
         print(row_str)
 
-    print("|__________________________|")
+    print("|" + "_" * (MAP_WIDTH * 2 + 1) + "|")
 
 
 def display_hud(player_kit: dict, player_health: int, player_pos: list[int], 
@@ -130,13 +205,13 @@ class KitSelector:
     @classmethod
     def select_difficulty(cls, difficulty_number: int) -> str:
         if difficulty_number not in DIFFICULTY_SETTINGS:
-            raise ValueError("Invalid difficulty selector. Use 1 for easy, 2 for normal, 3 for hard.")
+            raise ValueError("Invalid difficulty selector. Use 1 for easy, 2 for normal, 3 for hard, 4 for solo.")
         return DIFFICULTY_SETTINGS[difficulty_number]["name"]
 
     @classmethod
     def difficulty_settings(cls, difficulty_number: int) -> dict:
         if difficulty_number not in DIFFICULTY_SETTINGS:
-            raise ValueError("Invalid difficulty selector. Use 1 for easy, 2 for normal, 3 for hard.")
+            raise ValueError("Invalid difficulty selector. Use 1 for easy, 2 for normal, 3 for hard, 4 for solo.")
         return DIFFICULTY_SETTINGS[difficulty_number].copy()
 
     @classmethod
@@ -159,7 +234,7 @@ def offense_kit() -> dict:
                 "description": "Lunge forward with a powerful strike that stuns the enemy for 2 turns.",
                 "distance": 2,
                 "stun_time": 3,
-                "distance_change": 1,
+                "distance_change": 2,
             },
             "Sprint": {
                 "cooldown": 12,
@@ -190,7 +265,7 @@ def support_kit() -> dict:
             "Dash Forward": {
                 "cooldown": 6,
                 "description": "Dash forward to push back out of range.",
-                "distance_change": 2.75,
+                "distance_change": 3,
             },
             "Jump": {
                 "cooldown": 4,
@@ -209,8 +284,8 @@ def defense_kit() -> dict:
             "Repair Field": {
                 "cooldown": 5,
                 "description": "Heal yourself and gain a small shield.",
-                "heal": 30,
-                "overheal": 15,
+                "heal": 20,
+                "overheal": 10,
             },
             "Shield Bash": {
                 "cooldown": 6,
@@ -294,7 +369,10 @@ def get_neighbors(position: list[int]) -> list[list[int]]:
     x, y = position
     current_height = get_terrain_height(x, y)
     results = []
-    for dx, dy in [(1, 0), (-1, 0), (0, 1), (0, -1)]:
+    for dx, dy in [
+        (1, 0), (-1, 0), (0, 1), (0, -1),
+        (1, 1), (1, -1), (-1, 1), (-1, -1),
+    ]:
         nx, ny = x + dx, y + dy
         if is_valid_position(nx, ny, current_height):
             results.append([nx, ny])
@@ -321,6 +399,30 @@ def find_next_step(start: list[int], goal: list[int]) -> list[int] | None:
             queue.append((neighbor, next_step))
 
     return None
+
+
+def get_straight_direction(origin: list[int], target: list[int], away: bool = False) -> list[int]:
+    dx = target[0] - origin[0]
+    dy = target[1] - origin[1]
+    if abs(dx) >= abs(dy):
+        step = [1 if dx > 0 else -1 if dx < 0 else 0, 0]
+    else:
+        step = [0, 1 if dy > 0 else -1 if dy < 0 else 0]
+    if away:
+        step[0] *= -1
+        step[1] *= -1
+    return step
+
+
+def move_straight_line(position: list[int], direction: list[int], distance: int) -> list[int]:
+    current = position.copy()
+    for _ in range(distance):
+        next_pos = [current[0] + direction[0], current[1] + direction[1]]
+        current_height = get_terrain_height(current[0], current[1])
+        if not is_valid_position(next_pos[0], next_pos[1], current_height):
+            break
+        current = next_pos
+    return current
 
 
 def get_player_kit(kit_number: int) -> dict:
@@ -407,14 +509,16 @@ def apply_player_ability(
     player_health: int,
     shield: int,
     player_pos: list[int],
-    player_invincible: bool,
+    player_invincibility_turns: int,
     player_max_health: int,
-) -> tuple[int, int, list[int], int, bool]:
+    enemy_pos: list[int],
+    move_direction: list[int],
+) -> tuple[int, int, list[int], int, int]:
     enemy_stun = ability_data.get("stun_time", 0)
 
     if ability_name == "Skip":
         print("You skip your turn.")
-        return player_health, shield, player_pos, 0, player_invincible
+        return player_health, shield, player_pos, 0, player_invincibility_turns
 
     if ability_name == "Quick Heal":
         heal_amount = ability_data["heal"]
@@ -427,9 +531,10 @@ def apply_player_ability(
             player_health += healed
             print(f"You heal yourself for {healed} health.")
     elif ability_name == "Dash Forward":
-        new_pos = [player_pos[0] + 2, player_pos[1]]
-        current_height = get_terrain_height(player_pos[0], player_pos[1])
-        if is_valid_position(new_pos[0], new_pos[1], current_height):
+        steps = int(round(ability_data.get("distance_change", 3)))
+        direction = move_direction if move_direction != [0, 0] else get_straight_direction(player_pos, enemy_pos)
+        new_pos = move_straight_line(player_pos, direction, steps)
+        if new_pos != player_pos:
             player_pos = new_pos
             print(f"You dash forward to position ({player_pos[0]}, {player_pos[1]}).")
         else:
@@ -438,20 +543,22 @@ def apply_player_ability(
         shield += 25
         print("You brace yourself and reduce the next incoming damage.")
     elif ability_name == "Sprint":
-        new_pos = [player_pos[0] - 3, player_pos[1]]
-        current_height = get_terrain_height(player_pos[0], player_pos[1])
-        if is_valid_position(new_pos[0], new_pos[1], current_height):
+        steps = int(round(ability_data.get("distance_change", 3)))
+        direction = get_straight_direction(player_pos, enemy_pos, away=True)
+        new_pos = move_straight_line(player_pos, direction, steps)
+        if new_pos != player_pos:
             player_pos = new_pos
             print(f"You sprint backward to position ({player_pos[0]}, {player_pos[1]}).")
         else:
             print("Sprint blocked by terrain.")
     elif ability_name == "Jump":
-        print("You jump and become invincible for 1 turn.")
-        player_invincible = True
+        print("You jump and gain a one-hit immunity for 2 turns.")
+        player_invincibility_turns = 2
     elif ability_name == "Lunge":
-        new_pos = [player_pos[0] + 2, player_pos[1]]
-        current_height = get_terrain_height(player_pos[0], player_pos[1])
-        if is_valid_position(new_pos[0], new_pos[1], current_height):
+        steps = int(round(ability_data.get("distance_change", 2)))
+        direction = get_straight_direction(player_pos, enemy_pos)
+        new_pos = move_straight_line(player_pos, direction, steps)
+        if new_pos != player_pos:
             player_pos = new_pos
             print(f"You lunge forward to position ({player_pos[0]}, {player_pos[1]}) and stun the enemy.")
         else:
@@ -478,7 +585,7 @@ def apply_player_ability(
         if enemy_stun:
             print("The enemy is staggered by your attack.")
 
-    return player_health, shield, player_pos, enemy_stun, player_invincible
+    return player_health, shield, player_pos, enemy_stun, player_invincibility_turns
 
 
 def apply_enemy_attack(
@@ -487,12 +594,15 @@ def apply_enemy_attack(
     target: dict,
     player_shield: int,
     is_player: bool,
-    player_invincible: bool,
-) -> tuple[int, int, bool, int]:
+    player_invincibility_turns: int,
+    enemy_pos: list[int],
+    target_pos: list[int],
+) -> tuple[int, int, int, int, list[int]]:
     enemy_self_stun = 0
-    if is_player and player_invincible:
-        print(f"Executioner uses {enemy_name} but you are invincible and take no damage.")
-        return target["health"], player_shield, player_invincible, enemy_self_stun
+    if is_player and player_invincibility_turns > 0:
+        player_invincibility_turns -= 1
+        print(f"Executioner uses {enemy_name} but your jump absorbs the hit and you take no damage.")
+        return target["health"], player_shield, player_invincibility_turns, enemy_self_stun, enemy_pos
 
     if enemy_name == "Charge":
         damage = enemy_data["base_damage"] + int(target["health"] * enemy_data["percent_health"])
@@ -509,8 +619,18 @@ def apply_enemy_attack(
     else:
         target["health"] -= damage
 
+    if enemy_name == "Charge":
+        steps = abs(int(round(enemy_data.get("distance_change", -3))))
+        direction = get_straight_direction(enemy_pos, target_pos)
+        new_enemy_pos = move_straight_line(enemy_pos, direction, steps)
+        if new_enemy_pos != enemy_pos:
+            enemy_pos = new_enemy_pos
+            print(f"Executioner charges forward to {enemy_pos}.")
+        else:
+            print("Executioner charges but is blocked by terrain.")
+
     print(f"Executioner uses {enemy_name} and deals {damage} damage to {target['name']}.")
-    return target["health"], player_shield, player_invincible, enemy_self_stun
+    return target["health"], player_shield, player_invincibility_turns, enemy_self_stun, enemy_pos
 
 
 def choose_teammate_action(teammate: dict, enemy_pos: list[int]) -> tuple[str | None, dict | None]:
@@ -574,22 +694,25 @@ def apply_teammate_action(teammate: dict, ability_name: str, ability_data: dict,
             teammate["health"] -= ability_data.get("self_damage", 0)
             print(f"{teammate['name']} self-destructs and takes recoil damage.")
     elif ability_name == "Lunge":
-        desired_pos = [teammate["pos"][0] + 1, teammate["pos"][1]]
-        current_height = get_terrain_height(teammate["pos"][0], teammate["pos"][1])
-        if is_valid_position(desired_pos[0], desired_pos[1], current_height):
-            teammate["pos"] = desired_pos
+        steps = int(round(ability_data.get("distance_change", 2)))
+        direction = get_straight_direction(teammate["pos"], enemy_pos)
+        new_pos = move_straight_line(teammate["pos"], direction, steps)
+        if new_pos != teammate["pos"]:
+            teammate["pos"] = new_pos
             print(f"{teammate['name']} lunges forward to {teammate['pos']}.")
     elif ability_name == "Dash Forward":
-        desired_pos = [teammate["pos"][0] + 2, teammate["pos"][1]]
-        current_height = get_terrain_height(teammate["pos"][0], teammate["pos"][1])
-        if is_valid_position(desired_pos[0], desired_pos[1], current_height):
-            teammate["pos"] = desired_pos
+        steps = int(round(ability_data.get("distance_change", 2)))
+        direction = get_straight_direction(teammate["pos"], enemy_pos)
+        new_pos = move_straight_line(teammate["pos"], direction, steps)
+        if new_pos != teammate["pos"]:
+            teammate["pos"] = new_pos
             print(f"{teammate['name']} dashes forward to {teammate['pos']}.")
     elif ability_name == "Sprint":
-        desired_pos = [teammate["pos"][0] - 2, teammate["pos"][1]]
-        current_height = get_terrain_height(teammate["pos"][0], teammate["pos"][1])
-        if is_valid_position(desired_pos[0], desired_pos[1], current_height):
-            teammate["pos"] = desired_pos
+        steps = int(round(ability_data.get("distance_change", 3)))
+        direction = get_straight_direction(teammate["pos"], enemy_pos, away=True)
+        new_pos = move_straight_line(teammate["pos"], direction, steps)
+        if new_pos != teammate["pos"]:
+            teammate["pos"] = new_pos
             print(f"{teammate['name']} sprints back to {teammate['pos']}.")
     return enemy_stun
 
@@ -600,21 +723,32 @@ def play_survival_game() -> None:
     print("  1. Offense\n  2. Support\n  3. Defense")
     kit_choice = choose_int("Kit number: ", [1, 2, 3])
     print("Choose your difficulty:")
-    print("  1. Easy\n  2. Normal\n  3. Hard")
-    difficulty_choice = choose_int("Difficulty (1=Easy, 2=Normal, 3=Hard): ", [1, 2, 3])
+    print("  1. Easy\n  2. Normal\n  3. Hard\n  4. Solo (no teammates)")
+    difficulty_choice = choose_int("Difficulty (1=Easy, 2=Normal, 3=Hard, 4=Solo): ", [1, 2, 3, 4])
 
     settings = KitSelector.select(kit_choice, difficulty_choice)
     player_kit = get_player_kit(kit_choice)
     enemy = enemy_kit()
     survival_time = settings["survival_time"]
 
+    # Choose a random map from the predefined MAPS list and update globals.
+    global TERRAIN_MAP, MAP_HEIGHT, MAP_WIDTH
+    selected_index = random.randrange(len(MAPS))
+    TERRAIN_MAP = MAPS[selected_index]
+    MAP_HEIGHT = len(TERRAIN_MAP)
+    MAP_WIDTH = len(TERRAIN_MAP[0]) if TERRAIN_MAP else 0
+    print(f"Selected map layout #{selected_index + 1} of {len(MAPS)}.")
+
     player_pos = [10, 8]
     enemy_pos = [2, 8]
-    teammate_kit_numbers = [k for k in (1, 2, 3) if k != kit_choice]
-    teammates = [
-        create_teammate("Ally A", teammate_kit_numbers[0], [4, 10]),
-        create_teammate("Ally B", teammate_kit_numbers[1], [6, 10]),
-    ]
+    if difficulty_choice == 4:
+        teammates = []
+    else:
+        teammate_kit_numbers = [k for k in (1, 2, 3) if k != kit_choice]
+        teammates = [
+            create_teammate("Ally A", teammate_kit_numbers[0], [4, 10]),
+            create_teammate("Ally B", teammate_kit_numbers[1], [6, 10]),
+        ]
 
     player_health = player_kit["health"]
     player_max_health = player_health
@@ -622,8 +756,9 @@ def play_survival_game() -> None:
     player_stun = 0
     enemy_stun = 0
     counter = 0
-    player_invincible = False
+    player_invincibility_turns = 0
     lms_triggered = False
+    last_move_direction = [0, 0]
     player_cooldowns = {name: 0 for name in player_kit["abilities"]}
     enemy_cooldowns = {name: 0 for name in enemy["abilities"]}
 
@@ -657,7 +792,10 @@ def play_survival_game() -> None:
                 for teammate in teammates if teammate["alive"]
             )
             if target_candidates:
-                best_target = min(target_candidates, key=lambda item: calculate_distance(enemy_pos, item["pos"]))
+                best_target = min(
+                    target_candidates,
+                    key=lambda item: calculate_distance(enemy_pos, item["pos"]) + (5 if item["is_player"] else 0),
+                )
                 enemy_name, enemy_data = select_enemy_attack(enemy, enemy_cooldowns, enemy_pos, best_target["pos"])
                 in_range = calculate_distance(enemy_pos, best_target["pos"]) <= enemy_data.get("range", 1) if enemy_name else False
                 if enemy_name and in_range and can_attack(enemy_pos, best_target["pos"]):
@@ -666,8 +804,15 @@ def play_survival_game() -> None:
                         target_state = {"health": player_health, "name": "Player"}
                     else:
                         target_state = {"health": target["teammate"]["health"], "name": target["name"], "teammate": target["teammate"]}
-                    target_health, shield, player_invincible, enemy_self_stun = apply_enemy_attack(
-                        enemy_name, enemy_data, target_state, shield, target["is_player"], player_invincible
+                    target_health, shield, player_invincibility_turns, enemy_self_stun, enemy_pos = apply_enemy_attack(
+                        enemy_name,
+                        enemy_data,
+                        target_state,
+                        shield,
+                        target["is_player"],
+                        player_invincibility_turns,
+                        enemy_pos,
+                        best_target["pos"],
                     )
                     if target["is_player"]:
                         player_health = target_health
@@ -677,7 +822,7 @@ def play_survival_game() -> None:
                             target["teammate"]["alive"] = False
                             survival_time += 30
                             print(f"{target['name']} has been downed! Timer extended by 30 seconds.")
-                            if not lms_triggered and all(not mate["alive"] for mate in teammates):
+                            if not lms_triggered and teammates and all(not mate["alive"] for mate in teammates):
                                 lms_triggered = True
                                 survival_time = counter + 140
                                 player_health = 165
@@ -735,13 +880,14 @@ def play_survival_game() -> None:
             player_stun -= 1
         else:
             print("\n=== MOVEMENT PHASE ===")
-            print("Use W/A/S/D keys to move, or press Enter to skip movement:")
+            print("Use W/A/S/D keys to move, or Q/E/Z/C for diagonals, or press Enter to skip movement:")
             print("  W = North (up)")
             print("  A = West (left)")
             print("  S = South (down)")
             print("  D = East (right)")
+            print("  Q = Northwest\n  E = Northeast\n  Z = Southwest\n  C = Southeast")
 
-            move_input = input("Your move (W/A/S/D or Enter): ").strip().upper()
+            move_input = input("Your move (W/A/S/D/Q/E/Z/C or Enter): ").strip().upper()
             new_pos = player_pos.copy()
             if move_input == 'W':
                 new_pos[1] -= 1
@@ -755,12 +901,29 @@ def play_survival_game() -> None:
             elif move_input == 'D':
                 new_pos[0] += 1
                 direction = "east"
+            elif move_input == 'Q':
+                new_pos[0] -= 1
+                new_pos[1] -= 1
+                direction = "northwest"
+            elif move_input == 'E':
+                new_pos[0] += 1
+                new_pos[1] -= 1
+                direction = "northeast"
+            elif move_input == 'Z':
+                new_pos[0] -= 1
+                new_pos[1] += 1
+                direction = "southwest"
+            elif move_input == 'C':
+                new_pos[0] += 1
+                new_pos[1] += 1
+                direction = "southeast"
             else:
                 direction = None
 
             if direction:
                 current_height = get_terrain_height(player_pos[0], player_pos[1])
                 if is_valid_position(new_pos[0], new_pos[1], current_height):
+                    last_move_direction = [new_pos[0] - player_pos[0], new_pos[1] - player_pos[1]]
                     player_pos = new_pos
                     print(f"You move {direction} to position ({player_pos[0]}, {player_pos[1]})")
                 else:
@@ -771,8 +934,8 @@ def play_survival_game() -> None:
             print("\n=== ABILITY PHASE ===")
             ability_name, ability_data = choose_player_ability(player_kit, player_cooldowns)
             if ability_name != "Skip":
-                player_health, shield, player_pos, new_enemy_stun, player_invincible = apply_player_ability(
-                    ability_name, ability_data, player_health, shield, player_pos, player_invincible, player_max_health
+                player_health, shield, player_pos, new_enemy_stun, player_invincibility_turns = apply_player_ability(
+                    ability_name, ability_data, player_health, shield, player_pos, player_invincibility_turns, player_max_health, enemy_pos, last_move_direction
                 )
                 player_cooldowns[ability_name] = ability_data["cooldown"]
                 enemy_stun += new_enemy_stun
