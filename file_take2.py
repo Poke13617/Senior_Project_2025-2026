@@ -1,4 +1,5 @@
 import random
+import secrets
 from collections import deque
 
 DIFFICULTY_SETTINGS = {
@@ -259,8 +260,7 @@ def display_hud(player_kit: dict, player_health: int, player_pos: list[int],
     print("└─────────────────────────────────────────────┘")
 
 
-class KitSelector:
-    """Select a player kit and difficulty by number and return their names and timing settings."""
+class KitSelector: # This is going to be so we have our three selectors. These will give us our starting kit with the other 2 we do not pick as teammates (unless LMS difficulty is selected.) Difficulty will be used to set the duration that the timer will be on. Hard mode will be the longest, with solo just starting an LMS from the beginning of the game.
 
     KIT_MAP = {
         1: "Offense",
@@ -296,7 +296,7 @@ class KitSelector:
         }
 
 
-def offense_kit() -> dict:
+def offense_kit() -> dict: # Sets what's needed for the offense kit to function, like distance, cooldown, descriptions, and how long stuns apply for (if applicable)
     return {
         "kit": KitSelector.select_kit(1),
         "health": 90,
@@ -322,16 +322,17 @@ def offense_kit() -> dict:
     }
 
 
-def support_kit() -> dict:
+def support_kit() -> dict: # Same as the last, but just for support
     return {
         "kit": KitSelector.select_kit(2),
         "health": 100,
         "abilities": {
             "Quick Heal": {
                 "cooldown": 4,
-                "description": "Quick self-heal that can overheal by 20 without affecting movement.",
+                "description": "Heal yourself and nearby teammates within 2 tiles, can overheal by 20 without affecting movement.",
                 "heal": 25,
                 "overheal": 20,
+                "radius": 2,
                 "distance_change": 0,
             },
             "Dash Forward": {
@@ -348,7 +349,7 @@ def support_kit() -> dict:
     }
 
 
-def defense_kit() -> dict:
+def defense_kit() -> dict: # Same as the last two, but defense's version.
     return {
         "kit": KitSelector.select_kit(3),
         "health": 165,
@@ -378,7 +379,7 @@ def defense_kit() -> dict:
     }
 
 
-def enemy_kit() -> dict:
+def enemy_kit() -> dict: # Sets up the executioner kit. This is so we have abilities that it can do.
     return {
         "kit": "Executioner",
         "health": 220,
@@ -408,11 +409,11 @@ def enemy_kit() -> dict:
     }
 
 
-def calculate_distance(a: list[int], b: list[int]) -> int:
+def calculate_distance(a: list[int], b: list[int]) -> int: # Gives a numerical distance from the executioner
     return abs(a[0] - b[0]) + abs(a[1] - b[1])
 
 
-def has_line_of_sight(start: list[int], end: list[int]) -> bool:
+def has_line_of_sight(start: list[int], end: list[int]) -> bool: # Used for pathfinding, characters and enemies go around walls if they have to in order to complete a chase (either running or hunting.)
     if start == end:
         return True
     if start[0] == end[0]:
@@ -430,7 +431,7 @@ def has_line_of_sight(start: list[int], end: list[int]) -> bool:
     return False
 
 
-def can_attack(attacker_pos: list[int], target_pos: list[int]) -> bool:
+def can_attack(attacker_pos: list[int], target_pos: list[int]) -> bool: #function to check if the executioner is able to attack an enemy in range.
     return (
         has_line_of_sight(attacker_pos, target_pos)
         and abs(get_terrain_height(attacker_pos[0], attacker_pos[1]) - get_terrain_height(target_pos[0], target_pos[1])) <= 1
@@ -497,7 +498,7 @@ def move_straight_line(position: list[int], direction: list[int], distance: int)
     return current
 
 
-def get_player_kit(kit_number: int) -> dict:
+def get_player_kit(kit_number: int) -> dict: # kit selector!
     if kit_number == 1:
         return offense_kit()
     if kit_number == 2:
@@ -507,7 +508,7 @@ def get_player_kit(kit_number: int) -> dict:
     raise ValueError("Invalid kit selector. Use 1 for offense, 2 for support, 3 for defense.")
 
 
-def create_teammate(name: str, kit_number: int, position: list[int]) -> dict:
+def create_teammate(name: str, kit_number: int, position: list[int]) -> dict: # Sets the teammates
     kit = get_player_kit(kit_number)
     return {
         "name": name,
@@ -585,6 +586,7 @@ def apply_player_ability(
     player_max_health: int,
     enemy_pos: list[int],
     move_direction: list[int],
+    teammates: list[dict] = None,
 ) -> tuple[int, int, list[int], int, int]:
     enemy_stun = ability_data.get("stun_time", 0)
 
@@ -595,6 +597,9 @@ def apply_player_ability(
     if ability_name == "Quick Heal":
         heal_amount = ability_data["heal"]
         overheal_amount = ability_data.get("overheal", 0)
+        radius = ability_data.get("radius", 0)
+        
+        # Heal the player
         if player_health >= player_max_health:
             shield += overheal_amount
             print(f"You are already at full health and gain {overheal_amount} overheal.")
@@ -602,6 +607,17 @@ def apply_player_ability(
             healed = min(player_max_health - player_health, heal_amount)
             player_health += healed
             print(f"You heal yourself for {healed} health.")
+        
+        # Heal teammates within radius
+        if teammates and radius > 0:
+            for teammate in teammates:
+                if teammate["alive"]:
+                    distance = calculate_distance(player_pos, teammate["pos"])
+                    if distance <= radius:
+                        teammate_heal_amount = min(teammate["max_health"] - teammate["health"], heal_amount)
+                        teammate["health"] += teammate_heal_amount
+                        if teammate_heal_amount > 0:
+                            print(f"You heal {teammate['name']} for {teammate_heal_amount} health.")
     elif ability_name == "Dash Forward":
         steps = int(round(ability_data.get("distance_change", 3)))
         direction = move_direction if move_direction != [0, 0] else get_straight_direction(player_pos, enemy_pos)
@@ -790,7 +806,7 @@ def apply_teammate_action(teammate: dict, ability_name: str, ability_data: dict,
 
 
 def play_survival_game() -> None:
-    print("Welcome to Survivor vs Executioner!")
+    print("Welcome to Asymmetrical Text Game!")
     print("Choose your survivor kit:")
     print("  1. Offense\n  2. Support\n  3. Defense")
     kit_choice = choose_int("Kit number: ", [1, 2, 3])
@@ -804,8 +820,13 @@ def play_survival_game() -> None:
     survival_time = settings["survival_time"]
 
     # Choose a random map from the predefined MAPS list and update globals.
+    # Use `secrets` for non-deterministic selection each run (stronger entropy source).
     global TERRAIN_MAP, MAP_HEIGHT, MAP_WIDTH
-    selected_index = random.randrange(len(MAPS))
+    try:
+        selected_index = secrets.randbelow(len(MAPS))
+    except Exception:
+        # Fallback to random if secrets is unavailable for some reason.
+        selected_index = random.randrange(len(MAPS))
     TERRAIN_MAP = MAPS[selected_index]
     MAP_HEIGHT = len(TERRAIN_MAP)
     MAP_WIDTH = len(TERRAIN_MAP[0]) if TERRAIN_MAP else 0
@@ -945,7 +966,7 @@ def play_survival_game() -> None:
                     survival_time = counter + 140
                     player_health = 165
                     player_max_health = 165
-                    print("LMS event triggered! Timer reset to 140 and your health is restored to 165.")
+                    print("Last Man Standing! Timer reset to 140 and your health is restored to 165.")
 
         if player_stun > 0:
             print("You are stunned and lose this turn.")
@@ -1007,7 +1028,7 @@ def play_survival_game() -> None:
             ability_name, ability_data = choose_player_ability(player_kit, player_cooldowns)
             if ability_name != "Skip":
                 player_health, shield, player_pos, new_enemy_stun, player_invincibility_turns = apply_player_ability(
-                    ability_name, ability_data, player_health, shield, player_pos, player_invincibility_turns, player_max_health, enemy_pos, last_move_direction
+                    ability_name, ability_data, player_health, shield, player_pos, player_invincibility_turns, player_max_health, enemy_pos, last_move_direction, teammates
                 )
                 player_cooldowns[ability_name] = ability_data["cooldown"]
                 enemy_stun += new_enemy_stun
