@@ -3,10 +3,10 @@ import secrets
 from collections import deque
 
 DIFFICULTY_SETTINGS = {
-    1: {"name": "Easy", "survival_time": 90},
-    2: {"name": "Normal", "survival_time": 120},
-    3: {"name": "Hard", "survival_time": 180},
-    4: {"name": "Solo", "survival_time": 120},
+    1: {"name": "Easy", "survival_time": 120},
+    2: {"name": "Normal", "survival_time": 150},
+    3: {"name": "Hard", "survival_time": 230},
+    4: {"name": "Solo", "survival_time": 200},
 }
 
 

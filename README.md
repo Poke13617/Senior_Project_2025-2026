@@ -72,7 +72,4 @@ HOW TO WIN:
 
 To win, you survive the timer until it hits zero. When it does, you win (There isn't much else to say. Just survive the timer.)
 
-
-Made by me, but with the assistance of github copilot for finding ways to implement some of these features, such as the mini-map and HUD. It was used on the side during some vibe coding sessions to also find where errors were being executed.
-
 Thank you for reading the readme and have a great day!
